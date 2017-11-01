@@ -1,0 +1,110 @@
+	
+<html>
+<head>
+
+<meta charset="utf-8"/>
+	<script type="text/javascript" src="ichart.1.2.min.js"></script>
+	
+</head>
+<body>
+	<script type="text/javascript" >
+		var flow=[];
+		for(var i=0;i<25;i++){
+			flow.push(Math.floor(Math.random()*(10+((i%16)*5)))+10);
+		}	
+		
+		var data=[
+			{
+				name:'PV',
+				value:flow,
+				color:'#ec4646',
+				line_width:2
+			}
+		];
+		var labels=["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"];
+		$(function(){
+			var chart=new iChart.LineBasic2D({
+				render:'canvasDiv',
+				data:data,
+				background_color:'#2e2e2e',
+				align:'center',
+				title:{
+					text:'ichartjs官方网站上一日PV流量',
+					font_size:20,
+					color:'#666666'
+				},
+				subtitle:{
+					text:'14:00-16:00访问量达到最大值',
+					color:'#666666',
+					font_size:13
+				},
+				footnote:'ichartjs.com',
+				width:800,
+				height:400,
+				sub_option : {
+					smooth : true,
+					label:false,
+					hollow:false,
+					hollow_inside:false,
+					point_size:8
+				},
+				tip:{
+					enable:true,
+					shadow:true,
+					listeners:{
+						 //tip:提示框对象、name:数据名称、value:数据值、text:当前文本、i:数据点的索引
+						parseText:function(tip,name,value,text,i){
+							return "<span style='color:#005268;font-size:12px'>"+labels[i]+":00访问量约:<br/>"
+							+"</span><span style='color:#005268;font-size:16px'>"+value+"万</span>";
+						}
+					}
+				},
+				crosshair:{
+					enable:true,
+					line_color:'#ec4646'
+				},
+				coordinate:{
+					axis:{
+						width:[0,0,3,3],
+						color:'#252525'
+					},
+					
+					scale:[{
+						position:'left',
+						start_scale:0,
+						end_scale:100,
+						scale_space:10,
+						scale_size:2,
+						label:{color:'#9d987a'}
+					},{
+						position:'bottom',	
+						 label : {color:'#9d987a',font : '微软雅黑',fontsize:11,fontweight:600},
+						 scale_enable : false,
+						 labels:labels
+					}]
+				}
+			});
+			
+			chart.plugin(new iChart.Custom({
+				drawFn:function(){
+					var coo=chart.getCoordinate(),
+						x=coo.get('originx'),
+						y=coo.get('originy'),
+						w=coo.width,
+						H=coo.height;
+						
+						chart.target.textAlign('start')
+						.textBaseline('bottom')
+						.textFont('600 11px Verdana')
+						.fillText('访问量（万）',x-20,y-12,false,'#9d987a')
+						.textBaseline('top')
+						.fillText('（时间）',x+w+10,y+H+10,false,'#9d987a');
+				}
+			}));
+			
+			chart.draw();
+		});
+	</script>
+	<div id="canvasDiv"></div>
+</body>
+</html>`          
